@@ -41,6 +41,7 @@ package com.sda.twitter.persistance;
 //
 //}
 
+import com.sda.twitter.utils.EnvironmentVariableUtil;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -60,6 +61,9 @@ public class HibernateUtil {
 //            return metadata.getSessionFactoryBuilder().build();
             //                    .build();
             return new Configuration()
+                    .setProperty(HIBERNATE_CONNECTION_URL, EnvironmentVariableUtil.getVariable(HIBERNATE_CONNECTION_URL))
+                    .setProperty(HIBERNATE_CONNECTION_PASSWORD, EnvironmentVariableUtil.getVariable(HIBERNATE_CONNECTION_PASSWORD))
+                    .setProperty(HIBERNATE_CONNECTION_USERNAME, EnvironmentVariableUtil.getVariable(HIBERNATE_CONNECTION_USERNAME))
                     .configure()
                     .buildSessionFactory();
         } catch (Throwable ex) {
