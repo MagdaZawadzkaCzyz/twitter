@@ -12,14 +12,16 @@ import java.io.IOException;
 public class LoginFilter implements Filter {
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        final HttpSession session = request.getSession();
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        final HttpSession session = httpServletRequest.getSession();
         final TbUser currentUser = (TbUser) session.getAttribute("currentUser");
         if (currentUser == null) {
-            final RequestDispatcher requestDispatcher = req.getRequestDispatcher("login.jsp");
-            requestDispatcher.forward(req, response);
+            final String requestURI = httpServletRequest.getRequestURI();
+            httpServletRequest.setAttribute("currentURI", requestURI);
+            final RequestDispatcher requestDispatcher = servletRequest.getRequestDispatcher("login.jsp");
+            requestDispatcher.forward(servletRequest, servletResponse);
         }
-        chain.doFilter(req, response);
+        chain.doFilter(servletRequest, servletResponse);
     }
 }

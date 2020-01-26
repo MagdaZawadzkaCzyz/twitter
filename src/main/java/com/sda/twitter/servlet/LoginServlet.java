@@ -29,11 +29,18 @@ public class LoginServlet extends HttpServlet {
     ) throws IOException {
         String userName = request.getParameter("username");
         String password = request.getParameter("password");
+        final String currentURIFromLoginJSP = request.getParameter("currentURIFromLoginJSP");
         try {
             TbUser tbUser = userService.getUserByUserName(userName, password);
             HttpSession session = request.getSession();
             session.setAttribute("currentUser", tbUser);
-            response.sendRedirect("/");
+            if (currentURIFromLoginJSP == null
+                    || currentURIFromLoginJSP.isEmpty()
+                    || "login.jsp".equals(currentURIFromLoginJSP)) {
+                response.sendRedirect("/");
+            } else {
+                response.sendRedirect(currentURIFromLoginJSP);
+            }
         } catch (ImproperLoginCredentials improperLoginCredentials) {
             improperLoginCredentials.printStackTrace();
             response.sendRedirect("login.jsp");
